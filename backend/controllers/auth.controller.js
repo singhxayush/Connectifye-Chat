@@ -32,13 +32,11 @@ export const signup = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-
     // Profile Avatars
     // Male: https://avatar.iran.liara.run/public/boy
     // Female: https://avatar.iran.liara.run/public/girl
     const MaleProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
     const FemaleProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
-    
 
     // let organization = [];
     // let currentUserOrganization = null;

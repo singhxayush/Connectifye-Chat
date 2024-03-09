@@ -18,7 +18,7 @@ export const getUserOrgs = async (req, res) => {
     try {
         const userId = req.user._id;
         const orgList = await User.findById(userId).select('organizations');
-        res.status(201).json(orgList);
+        res.status(201).json({ Organizations: orgList.organizations} );
         
     } catch (error) {
         console.log("Error in getUserOrgs controller: ", error.message)
@@ -31,7 +31,7 @@ export const getUsersCurrOrg = async (req, res) => {
     try {
         const userId = req.user._id;
         const currOrg = await User.findById(userId).select('currentOrganization');
-        res.status(201).json(currOrg);
+        res.status(201).json({ currentOrganization: currOrg.currentOrganization, });
         
     } catch (error) {
         console.log("Error in getUsersCurrOrg controller: ", error.message)
@@ -73,7 +73,7 @@ export const joinOrganization = async (req, res) => {
 
     } catch (error) {
         console.error('Error joining organization:', error);
-        res.status(500).send('Server error while joining organization.');
+        res.status(500).send('Server error wchile joining organization.');
     }
 };
 
@@ -95,10 +95,10 @@ export const switchOrganization = async (req, res) => {
             $set: { currentOrganization: switchId } // Keep as string
         }, { new: true });
 
-        res.status(201).send('Successfully switched')
+        res.status(201).json({ message: "Successfully switched" })
 
     } catch (error) {
         console.error('Error joining organization:', error);
-        res.status(500).send('Server error while joining organization.');
+        res.status(500).send('Internal Server error.');
     }
 }

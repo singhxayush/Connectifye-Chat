@@ -23,13 +23,13 @@ const isAdmin = async (req, res, next) => {
         const organization = await Organization.findById(organizationId);
 
         if (!organization) {
-            return res.status(404).send('Organization not found or You are not part of this organization.');
+            return res.status(404).json({ error: 'Organization not found or You are not part of this organization.' });
         }
 
         const isAdmin = organization.admin.includes(decoded.userId);
 
         if (!isAdmin) {
-            return res.status(403).send('Access denied. Not an admin.');
+            return res.status(403).json({ error: 'Access denied. Not an admin.' });
         }
 
         req.user = user;

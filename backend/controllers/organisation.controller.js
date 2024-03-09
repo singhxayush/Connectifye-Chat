@@ -39,26 +39,15 @@ export const createOrganization = async (req, res) => {
 };
 
 
-export const getAllOrganizationUsers = async (req, res) => {
+export const getOrgInfo = async (req, res) => {
     try {
-        console.log("inside the try block")
-        const organizationId = req.params.orgID; // orgID -> is what i have defined in the URL param
-        console.log(organizationId)
-
-        const organization = await Organization.findById(organizationId).populate('users').populate({
-            path: 'users',
-            select: '-password' // To exclude password
-        });
-        
-        // select("-password");
-
-        console.log(organization)
-        
-        if (!organization) {
-            return res.status(404).send('Organization not found.');
-        }
-        
-        res.json(organization.users);
+        // console.log("inside the try block")
+        const userId = req.user._id;
+        let currOrg = await User.findById(userId).select('currentOrganization');
+        currOrg = currOrg.currentOrganization;
+        const orgInfo = await Organization.findById(currOrg);
+        console.log(orgInfo); // returns all of the org's info, 
+        res.status(201).json(orgInfo)
 
     } catch (error) {
         console.error('Error getting organization users:', error);
@@ -81,7 +70,7 @@ export const generateInviteLink = async (req, res) => {
         // const inviteLink = `${req.protocol}://${req.get('host')}/api/users/join-new-org/${inviteCode}`;
 
         // res.json({ inviteLink, expiresAt });
-        res.json({ inviteCode, expiresAt });
+        res.status(201).json({ inviteCode, message: "Code expires within 24 hours" });
 
     } catch (error) {
         console.error('Error generating invite link:', error);
